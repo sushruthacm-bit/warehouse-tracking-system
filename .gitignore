@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Local Environment Variables (Keep credentials private)
+.env
+
+# System & Editor Files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

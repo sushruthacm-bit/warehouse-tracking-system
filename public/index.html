@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockMate | Warehouse Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">S</div>
+            <div>
+                <h2>StockMate</h2>
+                <span>WAREHOUSE SYSTEM</span>
+            </div>
+        </div>
+
+        <div class="menu-heading">MAIN MENU</div>
+
+        <nav>
+            <button class="nav-link active" data-page="dashboard">
+                <span>▦</span> Dashboard
+            </button>
+
+            <button class="nav-link" data-page="inventory">
+                <span>▣</span> Inventory
+            </button>
+
+            <button class="nav-link" data-page="movements">
+                <span>⇄</span> Stock Movements
+            </button>
+
+            <button class="nav-link" data-page="warehouses">
+                <span>⌂</span> Warehouses
+            </button>
+
+            <button class="nav-link" data-page="reports">
+                <span>▤</span> Reports
+            </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="help-box">
+                <div class="help-icon">?</div>
+                <h3>Need help?</h3>
+                <p>Manage your warehouse operations easily.</p>
+            </div>
+
+            <div class="profile">
+                <div class="avatar">A</div>
+                <div>
+                    <strong>Administrator</strong>
+                    <small>Warehouse Manager</small>
+                </div>
+            </div>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <p class="breadcrumb">Warehouse / <span id="breadcrumb">Dashboard</span></p>
+                <h1 id="pageTitle">Dashboard Overview</h1>
+            </div>
+
+            <div class="topbar-right">
+                <div class="live-status">
+                    <span class="live-dot"></span>
+                    Live Database
+                </div>
+
+                <button class="refresh-btn" onclick="refreshData()">
+                    ↻ Refresh
+                </button>
+            </div>
+        </header>
+
+
+        <!-- DASHBOARD PAGE -->
+        <section class="page active" id="dashboard">
+
+            <div class="welcome-banner">
+                <div>
+                    <p class="welcome-label">WELCOME BACK!</p>
+                    <h2>Manage your warehouse smarter.</h2>
+                    <p>Here's what's happening with your inventory today.</p>
+                </div>
+                <div class="banner-icon">📦</div>
+            </div>
+
+
+            <div class="section-heading">
+                <div>
+                    <h2>Overview</h2>
+                    <p>A quick summary of your warehouse.</p>
+                </div>
+            </div>
+
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span>Total Stock</span>
+                        <div class="stat-icon orange">▣</div>
+                    </div>
+                    <h2 id="totalStock">--</h2>
+                    <p>Units available</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span>Inventory Records</span>
+                        <div class="stat-icon brown">▤</div>
+                    </div>
+                    <h2 id="recordCount">--</h2>
+                    <p>Stored records</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span>Low Stock Items</span>
+                        <div class="stat-icon red">!</div>
+                    </div>
+                    <h2 id="lowStock">--</h2>
+                    <p>Needs attention</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-top">
+                        <span>Stock Movements</span>
+                        <div class="stat-icon dark">⇄</div>
+                    </div>
+                    <h2 id="movementCount">--</h2>
+                    <p>Total transactions</p>
+                </div>
+
+            </div>
+
+
+            <div class="content-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Recent Inventory</h2>
+                        <p>Your latest inventory records.</p>
+                    </div>
+
+                    <button class="text-btn" onclick="showPage('inventory')">
+                        View All →
+                    </button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Inventory ID</th>
+                                <th>Batch ID</th>
+                                <th>Warehouse</th>
+                                <th>Quantity</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardInventory"></tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="content-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Recent Stock Activity</h2>
+                        <p>Latest stock transactions.</p>
+                    </div>
+
+                    <button class="text-btn" onclick="showPage('movements')">
+                        View All →
+                    </button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Movement ID</th>
+                                <th>Batch ID</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardMovements"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <!-- INVENTORY PAGE -->
+        <section class="page" id="inventory">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Inventory Management</h2>
+                    <p>View and manage all your warehouse stock.</p>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button class="primary-btn" onclick="openForm('stockForm')">
+                        + Add Stock
+                    </button>
+                    <button class="secondary-btn" onclick="openForm('removeStockModal')">
+                        − Remove Stock
+                    </button>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <input type="text" id="inventorySearch"
+                       placeholder="Search batch or warehouse..."
+                       oninput="renderInventory()">
+
+                <select id="stockFilter" onchange="renderInventory()">
+                    <option value="all">All Stock</option>
+                    <option value="low">Low Stock</option>
+                    <option value="available">Available Stock</option>
+                    <option value="empty">Out of Stock</option>
+                </select>
+
+                <button class="secondary-btn" onclick="loadInventory()">
+                    ↻ Refresh
+                </button>
+            </div>
+
+            <div class="content-panel">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Inventory ID</th>
+                                <th>Batch ID</th>
+                                <th>Warehouse ID</th>
+                                <th>Quantity</th>
+                                <th>Last Updated</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <!-- MOVEMENTS PAGE -->
+        <section class="page" id="movements">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Stock Movements</h2>
+                    <p>Track stock coming in, going out and transfers.</p>
+                </div>
+
+                <button class="primary-btn" onclick="openForm('movementForm')">
+                    + New Movement
+                </button>
+            </div>
+
+            <div class="toolbar">
+                <input type="text" id="movementSearch"
+                       placeholder="Search movement or batch..."
+                       oninput="renderMovements()">
+
+                <select id="movementFilter" onchange="renderMovements()">
+                    <option value="all">All Movements</option>
+                    <option value="IN">Stock In</option>
+                    <option value="OUT">Stock Out</option>
+                    <option value="TRANSFER">Transfers</option>
+                </select>
+
+                <button class="secondary-btn" onclick="loadMovements()">
+                    ↻ Refresh
+                </button>
+            </div>
+
+            <div class="content-panel">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Movement ID</th>
+                                <th>Batch ID</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Quantity</th>
+                                <th>Movement Type</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="movementBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <!-- WAREHOUSES PAGE -->
+        <section class="page" id="warehouses">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Warehouse Overview</h2>
+                    <p>View warehouses appearing in your inventory records.</p>
+                </div>
+            </div>
+
+            <div class="warehouse-grid" id="warehouseGrid"></div>
+
+        </section>
+
+
+
+        <!-- REPORTS PAGE -->
+        <section class="page" id="reports">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Reports & Summary</h2>
+                    <p>Understand your current stock position.</p>
+                </div>
+
+                <button class="primary-btn" onclick="window.print()">
+                    Print Report
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span>Total Stock Units</span>
+                    <h2 id="reportStock">--</h2>
+                </div>
+
+                <div class="stat-card">
+                    <span>Total Records</span>
+                    <h2 id="reportRecords">--</h2>
+                </div>
+
+                <div class="stat-card">
+                    <span>Low Stock Records</span>
+                    <h2 id="reportLow">--</h2>
+                </div>
+
+                <div class="stat-card">
+                    <span>Total Movements</span>
+                    <h2 id="reportMovements">--</h2>
+                </div>
+            </div>
+
+            <div class="content-panel">
+                <div class="panel-header">
+                    <div>
+                        <h2>Stock Report</h2>
+                        <p>Inventory grouped by warehouse.</p>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Warehouse ID</th>
+                                <th>Inventory Records</th>
+                                <th>Total Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <footer>
+            <p>© 2026 StockMate · Warehouse Stock Movement & Batch Tracking System</p>
+        </footer>
+
+    </main>
+
+</div>
+
+
+
+<!-- REMOVE STOCK POPUP -->
+<div class="modal" id="removeStockModal">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeForm('removeStockModal')">×</button>
+
+        <h2>Remove Stock</h2>
+        <p>Dispatch stock from an existing inventory record.</p>
+
+        <form id="removeStockForm">
+            <label>Batch ID</label>
+            <input type="number" id="removeBatch" required>
+
+            <label>Warehouse ID</label>
+            <input type="number" id="removeWarehouse" required>
+
+            <label>Quantity</label>
+            <input type="number" id="removeQuantity" min="1" required>
+
+            <button type="submit" class="primary-btn full-btn" style="background: #d94b43;">
+                Confirm Remove Stock
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- ADD STOCK POPUP -->
+<div class="modal" id="stockForm">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeForm('stockForm')">×</button>
+
+        <h2>Add New Stock</h2>
+        <p>Enter the stock details below.</p>
+
+        <form id="addStockForm">
+            <label>Batch ID</label>
+            <input type="number" id="addBatch" required>
+
+            <label>Warehouse ID</label>
+            <input type="number" id="addWarehouse" required>
+
+            <label>Quantity</label>
+            <input type="number" id="addQuantity" min="1" required>
+
+            <button type="submit" class="primary-btn full-btn">
+                Add Stock
+            </button>
+        </form>
+    </div>
+</div>
+
+
+<!-- NEW MOVEMENT POPUP -->
+<div class="modal" id="movementForm">
+    <div class="modal-box">
+        <button class="close-btn" onclick="closeForm('movementForm')">×</button>
+
+        <h2>New Stock Movement</h2>
+        <p>Choose the type of stock operation.</p>
+
+        <form id="newMovementForm">
+
+            <label>Movement Type</label>
+            <select id="newMovementType" required>
+                <option value="IN">Stock In</option>
+                <option value="OUT">Stock Out</option>
+                <option value="TRANSFER">Transfer</option>
+            </select>
+
+            <label>Batch ID</label>
+            <input type="number" id="moveBatch" required>
+
+            <label>Quantity</label>
+            <input type="number" id="moveQuantity" min="1" required>
+
+            <label>From Warehouse ID</label>
+            <input type="number" id="moveFrom">
+
+            <label>To Warehouse ID</label>
+            <input type="number" id="moveTo">
+
+            <button type="submit" class="primary-btn full-btn">
+                Submit Movement
+            </button>
+
+        </form>
+    </div>
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
