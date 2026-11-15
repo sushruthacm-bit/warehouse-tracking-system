@@ -16,11 +16,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // MySQL Connection Pool Configuration
+
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '3306', 10),
-  user: process.env.DB_USER || 'warehouse_app',
-  password: process.env.DB_PASSWORD || 'WhApp_2026!Secure',
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME || 'warehouse_tracking',
   waitForConnections: true,
   connectionLimit: 15,
@@ -28,6 +29,10 @@ const dbConfig = {
   enableKeepAlive: true,
   keepAliveInitialDelay: 10000
 };
+
+if (!dbConfig.user || !dbConfig.password) {
+  throw new Error('Missing DB_USER or DB_PASSWORD in .env file');
+}
 
 const pool = mysql.createPool(dbConfig);
 
